@@ -7,6 +7,10 @@
 !(function($) {
   "use strict";
 
+
+  var PRODUCTIONURL = "https://instafakeprofile.herokuapp.com/";
+  var LOCALURL = "http://127.0.0.1:5000";
+
   // Smooth scroll for the navigation menu and links with .scrollto classes
   var scrolltoOffset = $('#header').outerHeight() - 17;
   $(document).on('click', '.nav-menu a, .mobile-nav a, .scrollto', function(e) {
@@ -318,7 +322,7 @@
           var processedData = ProcessRawData(user); 
 
           //Send data to server
-          var serverurl = 'http://127.0.0.1:5000//predict';
+          var serverurl = PRODUCTIONURL + '//predict';
           $.ajax({ 
             type: "POST",
             url: serverurl, 
