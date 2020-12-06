@@ -30,10 +30,6 @@ def home_endpoint():
     return render_template('index.html')
     #return ("hi")
 
-@app.route('/trainmodel')
-def home_endpoint2():
-    
-
 @app.route('/predict', methods=['POST'])
 def get_prediction():
     # Works only for a single sample
