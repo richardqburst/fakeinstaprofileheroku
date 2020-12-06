@@ -323,6 +323,7 @@
 
           //Send data to server
           var serverurl = PRODUCTIONURL + '/predict';
+          //var serverurl = LOCALURL + '/predict';
           $.ajax({ 
             type: "POST",
             url: serverurl, 
