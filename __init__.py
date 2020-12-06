@@ -51,4 +51,4 @@ def get_prediction():
 if __name__ == '__main__':
     load_model()  # load model at the beginning once only
     load_scale()
-    app.run(host='127.0.0.1', port=5000)
+    app.run()
