@@ -40,6 +40,12 @@ def get_prediction():
         print(data)
         featuresList = list(data.values())
         data = np.array(featuresList)[np.newaxis, :]  # converts shape from (4,) to (1, 4)
+        
+        with open('trainedModel.sav', 'rb') as f:
+            model = pickle.load(f)
+        with open('scale.sav', 'rb') as g:
+            scale = pickle.load(g)
+
         newdata = scale.transform(data)
         prediction = model.predict(newdata)  # runs globally loaded model on the data
     return str(prediction)
