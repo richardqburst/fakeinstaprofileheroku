@@ -8,7 +8,7 @@
   "use strict";
 
 
-  var PRODUCTIONURL = "https://instafakeprofile.herokuapp.com/";
+  var PRODUCTIONURL = "https://instafakeprofile.herokuapp.com";
   var LOCALURL = "http://127.0.0.1:5000";
 
   // Smooth scroll for the navigation menu and links with .scrollto classes
