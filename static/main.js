@@ -322,7 +322,7 @@
           var processedData = ProcessRawData(user); 
 
           //Send data to server
-          var serverurl = PRODUCTIONURL + '//predict';
+          var serverurl = PRODUCTIONURL + '/predict';
           $.ajax({ 
             type: "POST",
             url: serverurl, 
