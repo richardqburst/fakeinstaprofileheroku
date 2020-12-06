@@ -30,7 +30,9 @@ def home_endpoint():
     return render_template('index.html')
     #return ("hi")
 
-from ast import literal_eval
+@app.route('/test')
+def home_endpoint2():
+    return "test string working"
 
 @app.route('/predict', methods=['POST'])
 def get_prediction():
