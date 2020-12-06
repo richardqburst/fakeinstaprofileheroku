@@ -35,7 +35,6 @@ from ast import literal_eval
 @app.route('/predict', methods=['POST'])
 def get_prediction():
     # Works only for a single sample
-    time.sleep(3)
     if request.method == 'POST':
         data=request.get_json() 
         #data = request.args.get('pic')

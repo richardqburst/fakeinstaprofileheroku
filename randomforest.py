@@ -4,7 +4,7 @@ import time
 
 begin = time.time()
 #Importing Dataset
-dataset = pd.read_csv("Datasets/user_fake_authentic_2class.csv")
+dataset = pd.read_csv("dataset/user_fake_authentic_2class.csv")
 dataset.head()
 
 #Preparing Data For Training
@@ -42,10 +42,10 @@ pickle.dump(sc, open('scale.sav', 'wb'))
 #datavk =  [1109,83012986 ,198 ,10  ,1, 1, 179.57, 0,    0.01,       2.16         ,0.015   ,0           , 1.29]
 #datadt =  [6111,24487504 ,8   ,35  ,1, 0, 101.54, 0.08, 0.01,       2.30         ,0.06    ,0.33        , 0.25]
 #datadsr = [2800,117300   ,922 ,122 ,1, 0, 348,    0,    0.34799999, 1.159999967  ,0.01    ,0.086999998 ,0.477999985] 
-data = np.array(datadsr)[np.newaxis, :]
-newdata = sc.transform(data)
-ny_pred = classifier.predict(newdata)
-print(ny_pred)
+#data = np.array(datadsr)[np.newaxis, :]
+#newdata = sc.transform(data)
+#ny_pred = classifier.predict(newdata)
+#print(ny_pred)
 
 #loaded_model = pickle.load(open('trainedModel.sav', 'rb'))
 #y_pred = loaded_model.predict(X_test)
