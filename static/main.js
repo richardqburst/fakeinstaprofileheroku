@@ -290,7 +290,7 @@
         $.ajax({url: url})
         .done(function( data ) {
           $("#insta-profile").show();
-          if (typeof myVar !== 'undefined'){
+          if (typeof data.graphql === 'undefined'){
             alert("Too many requests !! Check after some time");
             return;
           }
