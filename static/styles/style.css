@@ -11,6 +11,7 @@
 body {
   font-family: "Open Sans", sans-serif;
   color: #444444;
+  background-color: #eee;
 }
 
 a {
@@ -2045,11 +2046,15 @@ textarea:focus, input:focus{
 }
 
 .account-profile{
-  border: 1px solid #aaa;
+  border: 1px solid #ddd;
   padding: 20px;
-  background-color:#ddd;
-  border-radius: 10px;
+  background-color:#fff;
   margin: auto;
+  width: 100%
+}
+
+.application-result{
+  margin: 30px 0;
 }
 
 .results{
@@ -2066,13 +2071,13 @@ textarea:focus, input:focus{
 
 .positive-result{
   display: none;
-  width: 50%;
+  width: 60%;
   margin: auto;
 }
 
 .negative-result{
   display: none;
-  width: 50%;
+  width: 60%;
   margin: auto;
 }
 
@@ -2084,7 +2089,20 @@ textarea:focus, input:focus{
 
 #insta-profile{
   display: none;
+ /* background: url('../img/real-img.png');*/
+  position: relative;
 }
+
+#insta-profile:before {
+  content: "";
+  background: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+} 
+
 
 .fake-message{
   border: 1px solid;
@@ -2108,4 +2126,18 @@ textarea:focus, input:focus{
   padding: 10px;
   margin: auto;
   color: #44a;
+}
+
+
+.profile-outer-container{
+  
+}
+
+.profile-inner-container{
+    background: rgb(240,240,240) 0;
+    border-radius: 20px;
+    position: relative;
+    width: 70%;
+    margin: auto;
+    padding: 40px;
 }

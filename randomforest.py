@@ -30,7 +30,7 @@ X_test = sc.transform(X_test)
 #Training the Algorithm
 from sklearn.ensemble import RandomForestClassifier
 
-classifier = RandomForestClassifier(n_estimators=60, random_state=0)
+classifier = RandomForestClassifier(n_estimators=80, random_state=0)
 classifier.fit(X_train, y_train)
 y_pred = classifier.predict(X_test)
 

@@ -33,6 +33,7 @@ def home_endpoint():
 @app.route('/predict', methods=['POST'])
 def get_prediction():
     # Works only for a single sample
+    # time.sleep(3)
     if request.method == 'POST':
         data=request.get_json() 
         #data = request.args.get('pic')
@@ -54,4 +55,4 @@ def get_prediction():
 if __name__ == '__main__':
     load_model()  # load model at the beginning once only
     load_scale()
-    app.run(debug="on")
+    app.run()

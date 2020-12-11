@@ -296,7 +296,7 @@
           }
           var user = data.graphql.user;
           $('html, body').animate({
-              scrollTop: $("#insta-profile").offset().top
+              scrollTop: $("#insta-profile").offset().top-100
            }, 2000);
 
           $("#account-pic").attr("src",user.profile_pic_url);
@@ -309,6 +309,7 @@
           if (user.is_private){
             $('.loading-div').hide();
             $('.private-result').show("slow");
+            $("#insta-profile").css("background", "url('static/img/private-img.png')");
             return
           }
 
@@ -316,14 +317,15 @@
           if (user.is_verified){
             $('.loading-div').hide();
             $('.positive-result').show("slow");
+            $("#insta-profile").css("background", "url('static/img/real-img.png')");
             return
           }
 
           var processedData = ProcessRawData(user); 
 
           //Send data to server
-          var serverurl = PRODUCTIONURL + '/predict';
-          //var serverurl = LOCALURL + '/predict';
+          //var serverurl = PRODUCTIONURL + '/predict';
+          var serverurl = LOCALURL + '/predict';
           $.ajax({ 
             type: "POST",
             url: serverurl, 
@@ -333,10 +335,14 @@
           })
           .done(function( data ) {
             $('.loading-div').hide("slow");
-            if (data[0]===1)
+            if (data[0]===1){
+              $("#insta-profile").css("background", "url('static/img/real-img.png')");
               $('.positive-result').show("slow");
-            else
+            }
+            else{
+              $("#insta-profile").css("background", "url('static/img/fake-img.png')");
               $('.negative-result').show("slow");
+            }
           });
 
         });
