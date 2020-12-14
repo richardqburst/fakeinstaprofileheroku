@@ -295,8 +295,8 @@
               var processedData = ProcessRawData(user,userposts.data.user.edge_owner_to_timeline_media); 
 
             //Send data to server
-           // var serverurl = PRODUCTIONURL + '/predict';
-            var serverurl = LOCALURL + '/predict';
+            var serverurl = PRODUCTIONURL + '/predict';
+            //var serverurl = LOCALURL + '/predict';
             $.ajax({ 
               type: "POST",
               url: serverurl, 
