@@ -2089,7 +2089,8 @@ textarea:focus, input:focus{
 
 #insta-profile{
   display: none;
- /* background: url('../img/real-img.png');*/
+  background: url('../img/bg2.png');
+  background-size: cover;
   position: relative;
 }
 
