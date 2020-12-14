@@ -174,9 +174,9 @@
     items: 1
   });
 
-  function ProcessRawData(user){
+  function ProcessRawData(user,posts){
 
-    var totalPosts = user.edge_felix_video_timeline.count+user.edge_owner_to_timeline_media.count;
+    var totalPosts = user.edge_owner_to_timeline_media.count;
     var followers = user.edge_followed_by.count;
     var following = user.edge_follow.count;
     var biographyLength = user.biography.length;
@@ -190,50 +190,15 @@
     }
 
 
-    var numberOfVideos = 0;
-    var numberOfNonVideos = 0;
-    if (user.edge_felix_video_timeline.count>=12){
-      numberOfVideos = 12;
-    }
-    else
-    {
-      numberOfVideos = user.edge_felix_video_timeline.count
-    }
-    if (user.edge_owner_to_timeline_media.count>=12){
-      numberOfNonVideos = 12;
-    }
-    else
-    {
-      numberOfNonVideos = user.edge_owner_to_timeline_media.count
-    }
+    var numberOfPosts = posts.edges.length;
+
     var i,totalCaptionLength = 0,totalCaptionsPresent = 0,nonimagesPresent= 0, locationTags=0, hashtagCount=0, totalLocationTags =0, totalLikes=0,totalComments=0;
     var avgCaptionLength = 0, avgCaptionsPresent=0, avgLocationTags =0, avgHashtagCount =0,capLength, captionZero = 0, avgLocationTags =0, engagementRatioLikes=0, engagementRatioComments=0;
+    var nonImagePosts =0, avgNonImagePosts = 0;
 
-    if (totalPosts){
-      //getting features from video content
-      for (i=0;i<numberOfVideos;i++){
-        var caption = user.edge_felix_video_timeline.edges[i].node.edge_media_to_caption.edges;
-        if (caption.length){
-          capLength = caption[0].node.text.length + user.edge_felix_video_timeline.edges[i].node.title.length;
-          hashtagCount += caption[0].node.text.split("#").length-1 + user.edge_felix_video_timeline.edges[i].node.title.split("#").length-1;
-        }
-        else{
-          capLength = user.edge_felix_video_timeline.edges[i].node.title.length;
-          hashtagCount += user.edge_felix_video_timeline.edges[i].node.title.split("#").length-1;
-        }
-        totalCaptionLength += capLength;
-        if (capLength>=4){
-          totalCaptionsPresent+=1;
-        }
-        if (user.edge_felix_video_timeline.edges[i].node.location)
-          totalLocationTags +=1;
-        totalLikes += user.edge_felix_video_timeline.edges[i].node.edge_liked_by.count;
-        totalComments += user.edge_felix_video_timeline.edges[i].node.edge_media_to_comment.count;
-      }
-
-      //getting data from other content
-      for (i=0;i<numberOfNonVideos;i++){
-        var caption = user.edge_owner_to_timeline_media.edges[i].node.edge_media_to_caption.edges;
+    if (numberOfPosts){
+      for (i=0;i<numberOfPosts;i++){
+        var caption = posts.edges[i].node.edge_media_to_caption.edges;
         if (caption.length){
           capLength = caption[0].node.text.length;
           hashtagCount += caption[0].node.text.split("#").length-1;
@@ -246,28 +211,29 @@
         if (capLength>=4){
           totalCaptionsPresent+=1;
         }
-        if (user.edge_owner_to_timeline_media.edges[i].node.location)
+        if (posts.edges[i].node.location)
           totalLocationTags +=1;
 
-        totalLikes += user.edge_owner_to_timeline_media.edges[i].node.edge_liked_by.count;
-        totalComments += user.edge_owner_to_timeline_media.edges[i].node.edge_media_to_comment.count;
+        if(posts.edges[i].node.is_video)
+          nonImagePosts+=1;
+
+        totalLikes += posts.edges[i].node.edge_media_preview_like.count;
+        totalComments += posts.edges[i].node.edge_media_to_comment.count;
       }
 
-      var computedPosts = numberOfVideos + numberOfNonVideos;
-      avgCaptionLength = totalCaptionLength/(computedPosts)
-      avgCaptionsPresent = totalCaptionsPresent/(computedPosts);
-      avgLocationTags = totalLocationTags/(computedPosts);
-      avgHashtagCount = hashtagCount/(computedPosts);
-      engagementRatioLikes = (totalLikes*100)/(computedPosts*followers);
-      engagementRatioComments = (totalComments*100)/(computedPosts*followers);
+      avgCaptionLength = totalCaptionLength/(numberOfPosts)
+      avgCaptionsPresent = totalCaptionsPresent/(numberOfPosts);
+      avgLocationTags = totalLocationTags/(numberOfPosts);
+      avgHashtagCount = hashtagCount/(numberOfPosts);
+      engagementRatioLikes = (totalLikes*100)/(numberOfPosts*followers);
+      engagementRatioComments = (totalComments*100)/(numberOfPosts*followers);
+      avgNonImagePosts = nonImagePosts/numberOfPosts;
 
     }
     captionZero = 1 -avgCaptionsPresent;
-    //check
-    var nonImagePosts =  1 - (user.edge_owner_to_timeline_media.count/totalPosts);
 
     var jsondata = {posts: totalPosts, flr : followers, flw:following, bl:biographyLength,pic:profilePicAvailability,
-     lin:externalLink, cl:avgCaptionLength, cz:captionZero, ni:nonImagePosts, erl:engagementRatioLikes, erc: engagementRatioComments, lt:avgLocationTags, hc:avgHashtagCount};
+     lin:externalLink, cl:avgCaptionLength, cz:captionZero, ni:avgNonImagePosts, erl:engagementRatioLikes, erc: engagementRatioComments, lt:avgLocationTags, hc:avgHashtagCount};
     return jsondata;
   }
 
@@ -321,30 +287,39 @@
             return
           }
 
-          var processedData = ProcessRawData(user); 
+          var userid = data.logging_page_id.substring(12);
+          //get posts of user
+          url = 'https://instagram.com/graphql/query/?query_id=17888483320059182&variables={"id":"'+userid+'","first":100,"after":null}'
+          $.ajax({url: url})
+          .done(function( userposts ) {
+              var processedData = ProcessRawData(user,userposts.data.user.edge_owner_to_timeline_media); 
 
-          //Send data to server
-          var serverurl = PRODUCTIONURL + '/predict';
-          //var serverurl = LOCALURL + '/predict';
-          $.ajax({ 
-            type: "POST",
-            url: serverurl, 
-            dataType: "json",
-            contentType: 'application/json',
-            data: JSON.stringify(processedData),
-          })
-          .done(function( data ) {
-            $('.loading-div').hide("slow");
-            if (data[0]===1){
-              $("#insta-profile").css("background", "url('static/img/real-img.png')");
-              $('.positive-result').show("slow");
-            }
-            else{
-              $("#insta-profile").css("background", "url('static/img/fake-img.png')");
-              $('.negative-result').show("slow");
-            }
+            //Send data to server
+           // var serverurl = PRODUCTIONURL + '/predict';
+            var serverurl = LOCALURL + '/predict';
+            $.ajax({ 
+              type: "POST",
+              url: serverurl, 
+              dataType: "json",
+              contentType: 'application/json',
+              data: JSON.stringify(processedData),
+            })
+            .done(function( data ) {
+              $('.loading-div').hide("slow");
+              if (data[0]===1){
+                $("#insta-profile").css("background", "url('static/img/real-img.png')");
+                $('.positive-result').show("slow");
+              }
+              else{
+                $("#insta-profile").css("background", "url('static/img/fake-img.png')");
+                $('.negative-result').show("slow");
+              }
           });
 
+            });
+
+
+          
         });
         return false;
       }
