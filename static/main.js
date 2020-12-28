@@ -247,6 +247,8 @@
     }
     else
       {
+        //default image
+        $("#insta-profile").css("background", "url('static/img/bg2.png')");
         $('.positive-result').hide();
         $('.negative-result').hide();
         $('.private-result').hide();
