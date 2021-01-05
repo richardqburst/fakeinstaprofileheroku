@@ -2142,3 +2142,29 @@ textarea:focus, input:focus{
     margin: auto;
     padding: 40px;
 }
+
+.report-error a{
+  float: right;
+  color: rgb(255,0,0);
+  text-decoration: underline;
+}
+
+.report-error a:hover{
+  color: rgb(205,50,50);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.contact-details-dev{
+    padding: 10px;
+    margin-right: 10px
+    border: 1px solid #ddd;
+    background-color: white;
+}
+
+.contact-details-mail{
+    padding: 10px;
+    margin-left: 10px
+    border: 1px solid #ddd;
+    background-color: white;
+}
